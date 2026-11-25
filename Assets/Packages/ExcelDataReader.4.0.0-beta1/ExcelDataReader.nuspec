@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>ExcelDataReader</id>
+    <version>4.0.0-beta1</version>
+    <authors>ExcelDataReader developers</authors>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <icon>ExcelDataReader.png</icon>
+    <readme>README.md</readme>
+    <projectUrl>https://github.com/ExcelDataReader/ExcelDataReader</projectUrl>
+    <description>Lightweight and fast library written in C# for reading Microsoft Excel files (XLS, XLSX).</description>
+    <releaseNotes>https://github.com/ExcelDataReader/ExcelDataReader/releases/tag/v4.0.0-beta1</releaseNotes>
+    <tags>excel xls xlsx dataset</tags>
+    <repository type="git" url="https://github.com/ExcelDataReader/ExcelDataReader" commit="0b70fee7e319555020e176085c9a5a7e8ae404ed" />
+    <dependencies>
+      <group targetFramework=".NETFramework4.6.2">
+        <dependency id="System.ValueTuple" version="4.5.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net8.0" />
+      <group targetFramework=".NETStandard2.0" />
+      <group targetFramework=".NETStandard2.1" />
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.IO.Compression" targetFramework=".NETFramework4.6.2" />
+    </frameworkAssemblies>
+  </metadata>
+</package>

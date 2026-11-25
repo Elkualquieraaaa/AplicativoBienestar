@@ -1,0 +1,1820 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ExcelDataReader</name>
+    </assembly>
+    <members>
+        <member name="T:ExcelDataReader.CellCommentMessage">
+            <summary>
+            An immutable plain-text message in a cell comment.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.CellCommentMessage.Author">
+            <summary>
+            Gets the author's display name, or null when the format does not provide one.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.CellCommentMessage.Text">
+            <summary>
+            Gets the comment text without rich-text formatting.
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.CellCommentThread">
+            <summary>
+            An immutable cell comment. A legacy note contains one message.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.CellCommentThread.Messages">
+            <summary>
+            Gets the messages in this comment.
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.CellError">
+            <summary>
+            Formula error. 
+            </summary>
+        </member>
+        <member name="F:ExcelDataReader.CellError.NULL">
+            <summary>
+            #NULL!
+            </summary>
+        </member>
+        <member name="F:ExcelDataReader.CellError.DIV0">
+            <summary>
+            #DIV/0!
+            </summary>
+        </member>
+        <member name="F:ExcelDataReader.CellError.VALUE">
+            <summary>
+            #VALUE!
+            </summary>
+        </member>
+        <member name="F:ExcelDataReader.CellError.REF">
+            <summary>
+            #REF!
+            </summary>
+        </member>
+        <member name="F:ExcelDataReader.CellError.NAME">
+            <summary>
+            #NAME?
+            </summary>
+        </member>
+        <member name="F:ExcelDataReader.CellError.NUM">
+            <summary>
+            #NUM!
+            </summary>
+        </member>
+        <member name="F:ExcelDataReader.CellError.NA">
+            <summary>
+            #N/A
+            </summary>
+        </member>
+        <member name="F:ExcelDataReader.CellError.GETTING_DATA">
+            <summary>
+            #GETTING_DATA
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.CellHyperlink">
+            <summary>
+            An immutable hyperlink, independent of the displayed cell value.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.CellHyperlink.Address">
+            <summary>
+            Gets the complete destination, including any fragment or within-document location.
+            Relative paths and escaping are preserved, and the destination is not validated or resolved.
+            An empty address can accompany a tooltip-only hyperlink.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.CellHyperlink.Tooltip">
+            <summary>
+            Gets the stored tooltip, or null when none is present.
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.CellRange">
+            <summary>
+            A range for cells using 0 index positions. 
+            </summary>
+            <param name="FromColumn">The column the range starts in.</param>
+            <param name="FromRow">The row the range starts in.</param>
+            <param name="ToColumn">The column the range ends in.</param>
+            <param name="ToRow">The row the range ends in.</param>
+        </member>
+        <member name="M:ExcelDataReader.CellRange.#ctor(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            A range for cells using 0 index positions. 
+            </summary>
+            <param name="FromColumn">The column the range starts in.</param>
+            <param name="FromRow">The row the range starts in.</param>
+            <param name="ToColumn">The column the range ends in.</param>
+            <param name="ToRow">The row the range ends in.</param>
+        </member>
+        <member name="P:ExcelDataReader.CellRange.FromColumn">
+            <summary>The column the range starts in.</summary>
+        </member>
+        <member name="P:ExcelDataReader.CellRange.FromRow">
+            <summary>The row the range starts in.</summary>
+        </member>
+        <member name="P:ExcelDataReader.CellRange.ToColumn">
+            <summary>The column the range ends in.</summary>
+        </member>
+        <member name="P:ExcelDataReader.CellRange.ToRow">
+            <summary>The row the range ends in.</summary>
+        </member>
+        <member name="M:ExcelDataReader.CellRange.ToString">
+            <inheritsdoc/>
+        </member>
+        <member name="T:ExcelDataReader.HorizontalAlignment">
+            <summary>
+            Horizontal alignment. 
+            </summary>
+        </member>
+        <member name="F:ExcelDataReader.HorizontalAlignment.General">
+            <summary>
+            General.
+            </summary>
+        </member>
+        <member name="F:ExcelDataReader.HorizontalAlignment.Left">
+            <summary>
+            Left.
+            </summary>
+        </member>
+        <member name="F:ExcelDataReader.HorizontalAlignment.Center">
+            <summary>
+            Center.
+            </summary>
+        </member>
+        <member name="F:ExcelDataReader.HorizontalAlignment.Right">
+            <summary>
+            Right.
+            </summary>
+        </member>
+        <member name="F:ExcelDataReader.HorizontalAlignment.Filled">
+            <summary>
+            Filled.
+            </summary>
+        </member>
+        <member name="F:ExcelDataReader.HorizontalAlignment.Justified">
+            <summary>
+            Justified.
+            </summary>
+        </member>
+        <member name="F:ExcelDataReader.HorizontalAlignment.CenteredAcrossSelection">
+            <summary>
+            Centered across selection.
+            </summary>
+        </member>
+        <member name="F:ExcelDataReader.HorizontalAlignment.Distributed">
+            <summary>
+            Distributed.
+            </summary>
+        </member>
+        <member name="F:ExcelDataReader.HorizontalAlignment.Centered">
+            <summary>
+            Same as <see cref="F:ExcelDataReader.HorizontalAlignment.Center"/>.
+            </summary>
+            <remarks>
+            This is an alias for <see cref="F:ExcelDataReader.HorizontalAlignment.Center"/> to maintain compatibility with older versions of the library.
+            It is recommended to use <see cref="F:ExcelDataReader.HorizontalAlignment.Center"/> for clarity in new code.
+            </remarks>
+        </member>
+        <member name="T:ExcelDataReader.VerticalAlignment">
+            <summary>
+            Vertical alignment.
+            </summary>
+        </member>
+        <member name="F:ExcelDataReader.VerticalAlignment.Top">
+            <summary>
+            Top.
+            </summary>
+        </member>
+        <member name="F:ExcelDataReader.VerticalAlignment.Center">
+            <summary>
+            Center.
+            </summary>
+        </member>
+        <member name="F:ExcelDataReader.VerticalAlignment.Bottom">
+            <summary>
+            Bottom.
+            </summary>
+        </member>
+        <member name="F:ExcelDataReader.VerticalAlignment.Justify">
+            <summary>
+            Justify.
+            </summary>
+        </member>
+        <member name="F:ExcelDataReader.VerticalAlignment.Distributed">
+            <summary>
+            Distributed.
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.CellStyle">
+            <summary>
+            Holds immutable style information for a cell.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.CellStyle.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ExcelDataReader.CellStyle"/> class with default values.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.CellStyle.FontIndex">
+            <summary>
+            Gets the font index.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.CellStyle.NumberFormatIndex">
+            <summary>
+            Gets the number format index.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.CellStyle.IndentLevel">
+            <summary>
+            Gets the indent level.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.CellStyle.HorizontalAlignment">
+            <summary>
+            Gets the horizontal alignment.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.CellStyle.VerticalAlignment">
+            <summary>
+            Gets the vertical alignment.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.CellStyle.Hidden">
+            <summary>
+            Gets a value indicating whether the cell is hidden.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.CellStyle.Locked">
+            <summary>
+            Gets a value indicating whether the cell is locked.
+            </summary>
+        </member>
+        <member name="F:ExcelDataReader.Core.BinaryFormat.BIFFRECORDTYPE.UNCALCED">
+            <summary>
+            If present the Calculate Message was in the status bar when Excel saved the file.
+            This occurs if the sheet changed, the Manual calculation option was on, and the Recalculate Before Save option was off.
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.Core.BinaryFormat.XlsBiffStream">
+            <summary>
+            Represents a BIFF stream. Records borrow a reusable frame and are valid until
+            the next read.
+            Reads must stay sequential so the RC4/XOR decryptor remains aligned.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.BinaryFormat.XlsBiffStream.Size">
+            <summary>
+            Gets the size of BIFF stream in bytes.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.BinaryFormat.XlsBiffStream.Position">
+            <summary>
+            Gets or sets the current position in BIFF stream.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.BinaryFormat.XlsBiffStream.CipherTransform">
+            <summary>
+            Gets or sets the ICryptoTransform instance used to decrypt the current block.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.BinaryFormat.XlsBiffStream.CipherBlock">
+            <summary>
+            Gets or sets the current block number being decrypted with CipherTransform.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Core.BinaryFormat.XlsBiffStream.Seek(System.Int32,System.IO.SeekOrigin)">
+            <summary>
+            Sets stream pointer to the specified offset.
+            </summary>
+            <param name="offset">Offset value.</param>
+            <param name="origin">Offset origin.</param>
+        </member>
+        <member name="M:ExcelDataReader.Core.BinaryFormat.XlsBiffStream.Transform(System.Security.Cryptography.ICryptoTransform,System.Byte[],System.Int32,System.Int32,System.Byte[])">
+            <summary>
+            Decrypts <paramref name="count"/> bytes starting at <paramref name="inputOffset"/>. The BIFF RC4 and XOR
+            transforms are stream ciphers that process any count in TransformBlock, so call them directly instead of
+            allocating a CryptoStream per chunk.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Core.BinaryFormat.XlsBiffStream.CreateBlockDecryptor(System.Int32)">
+            <summary>
+            Create or re-key the ICryptoTransform instance used to decrypt a 1024-byte block.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Core.BinaryFormat.XlsBiffStream.AlignBlockDecryptor(System.Int32)">
+            <summary>
+            Decrypt some dummy bytes to align the decryptor with the position in the current 1024-byte block.
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.Core.BinaryFormat.XlsSheetInfo">
+            <summary>
+            Represents Sheet record in Workbook Globals.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.BinaryFormat.XlsSheetInfo.StartOffset">
+            <summary>
+            Gets the worksheet data start offset.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.BinaryFormat.XlsSheetInfo.Type">
+            <summary>
+            Gets the worksheet type.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.BinaryFormat.XlsSheetInfo.VisibleState">
+            <summary>
+            Gets the visibility of the worksheet.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Core.BinaryFormat.XlsSheetInfo.GetSheetName(System.Text.Encoding)">
+            <summary>
+            Gets the name of the worksheet.
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.Core.BinaryFormat.XlsSSTReader">
+            <summary>
+            Assembles BIFF8 strings across borrowed SST/STRING and CONTINUE frames.
+            Only copied character data and header/tail progress survive a call.
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.Core.BinaryFormat.XlsWorkbook">
+            <summary>
+            Represents Globals section of workbook.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.BinaryFormat.XlsWorkbook.HasSharedStrings">
+            <summary>
+            Gets a value indicating whether a shared string table was found.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.BinaryFormat.XlsWorkbook.IsDate1904">
+            <summary>
+            Gets a value indicating whether the workbook uses the 1904 date system.
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.Core.BinaryFormat.XlsWorksheet">
+            <summary>
+            Represents Worksheet section in workbook.
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.Core.Cell">
+            <summary>
+            Represents a cell.
+            </summary>
+            <param name="ColumnIndex">The zero-based column index.</param>
+            <param name="Value">The value.</param>
+            <param name="EffectiveStyle">
+            The effective style on the cell. The effective style is determined from 
+            the Cell XF, with optional overrides from a Cell Style XF.
+            </param>
+            <param name="Error">Cell error -or- <s langword="null"/>.</param>
+        </member>
+        <member name="M:ExcelDataReader.Core.Cell.#ctor(System.Int32,System.Object,ExcelDataReader.Core.ExtendedFormat,System.Nullable{ExcelDataReader.CellError})">
+            <summary>
+            Represents a cell.
+            </summary>
+            <param name="ColumnIndex">The zero-based column index.</param>
+            <param name="Value">The value.</param>
+            <param name="EffectiveStyle">
+            The effective style on the cell. The effective style is determined from 
+            the Cell XF, with optional overrides from a Cell Style XF.
+            </param>
+            <param name="Error">Cell error -or- <s langword="null"/>.</param>
+        </member>
+        <member name="P:ExcelDataReader.Core.Cell.ColumnIndex">
+            <summary>The zero-based column index.</summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.Cell.Value">
+            <summary>The value.</summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.Cell.EffectiveStyle">
+            <summary>
+            The effective style on the cell. The effective style is determined from 
+            the Cell XF, with optional overrides from a Cell Style XF.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.Cell.Error">
+            <summary>Cell error -or- <s langword="null"/>.</summary>
+        </member>
+        <member name="T:ExcelDataReader.Core.CommonWorkbook">
+            <summary>
+            Common handling of extended formats (XF), number formats and decoded cell materialization.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CommonWorkbook.Formats">
+            <summary>
+            Gets the dictionary of global number format strings. Always includes the built-in formats at their
+            corresponding indices and any additional formats specified in the workbook file.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CommonWorkbook.ExtendedFormats">
+            <summary>
+            Gets the Cell XFs.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CommonWorkbook.CellStyleExtendedFormats">
+            <summary>
+            Gets the Cell Style XFs.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Core.CommonWorkbook.AddNumberFormat(System.Int32,System.String)">
+            <summary>
+            Registers a number format string in the workbook's Formats dictionary.
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.Core.CompoundFormat.CompoundDirectoryEntry">
+            <summary>
+            Represents single Root Directory record.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundDirectoryEntry.EntryName">
+            <summary>
+            Gets or sets the name of directory entry.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundDirectoryEntry.EntryType">
+            <summary>
+            Gets or sets the entry type.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundDirectoryEntry.EntryColor">
+            <summary>
+            Gets or sets the entry "color" in directory tree.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundDirectoryEntry.LeftSiblingSid">
+            <summary>
+            Gets or sets the SID of left sibling.
+            </summary>
+            <remarks>0xFFFFFFFF if there's no one.</remarks>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundDirectoryEntry.RightSiblingSid">
+            <summary>
+            Gets or sets the SID of right sibling.
+            </summary>
+            <remarks>0xFFFFFFFF if there's no one.</remarks>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundDirectoryEntry.ChildSid">
+            <summary>
+            Gets or sets the SID of first child (if EntryType is STGTY_STORAGE).
+            </summary>
+            <remarks>0xFFFFFFFF if there's no one.</remarks>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundDirectoryEntry.ClassId">
+            <summary>
+            Gets or sets the CLSID of container (if EntryType is STGTY_STORAGE).
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundDirectoryEntry.UserFlags">
+            <summary>
+            Gets or sets the user flags of container (if EntryType is STGTY_STORAGE).
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundDirectoryEntry.CreationTime">
+            <summary>
+            Gets or sets the creation time of entry.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundDirectoryEntry.LastWriteTime">
+            <summary>
+            Gets or sets the last modification time of entry.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundDirectoryEntry.StreamFirstSector">
+            <summary>
+            Gets or sets the first sector of data stream (if EntryType is STGTY_STREAM).
+            </summary>
+            <remarks>if EntryType is STGTY_ROOT, this can be first sector of MiniStream.</remarks>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundDirectoryEntry.StreamSize">
+            <summary>
+            Gets or sets the size of data stream (if EntryType is STGTY_STREAM).
+            </summary>
+            <remarks>if EntryType is STGTY_ROOT, this can be size of MiniStream.</remarks>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundDirectoryEntry.IsEntryMiniStream">
+            <summary>
+            Gets or sets a value indicating whether this entry relats to a ministream.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundDirectoryEntry.PropType">
+            <summary>
+            Gets or sets the prop type. Reserved, must be 0.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Core.CompoundFormat.CompoundDocument.ReadStream(System.IO.Stream,System.UInt32,System.Int32,System.Boolean)">
+            <summary>
+            Reads bytes from a regular or mini stream.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Core.CompoundFormat.CompoundDocument.ReadDifSectorChain(System.IO.BinaryReader)">
+            <summary>
+            The header contains the first 109 DIF entries. If there are any more, read from a separate stream.
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.Core.CompoundFormat.CompoundHeader">
+            <summary>
+            Represents Excel file header.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundHeader.Signature">
+            <summary>
+            Gets or sets the file signature.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundHeader.IsSignatureValid">
+            <summary>
+            Gets a value indicating whether the signature is valid. 
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundHeader.ClassId">
+            <summary>
+            Gets or sets the class id. Typically filled with zeroes.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundHeader.Version">
+            <summary>
+            Gets or sets the version. Must be 0x003E.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundHeader.DllVersion">
+            <summary>
+            Gets or sets the dll version. Must be 0x0003.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundHeader.ByteOrder">
+            <summary>
+            Gets or sets the byte order. Must be 0xFFFE.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundHeader.SectorSizeInPot">
+            <summary>
+            Gets or sets the sector size in Pot.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundHeader.SectorSize">
+            <summary>
+            Gets the sector size. Typically 512.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundHeader.MiniSectorSizeInPot">
+            <summary>
+            Gets or sets the mini sector size in Pot.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundHeader.MiniSectorSize">
+            <summary>
+            Gets the mini sector size. Typically 64.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundHeader.DirectorySectorCount">
+            <summary>
+            Gets or sets the number of directory sectors. If Major Version is 3, the Number of 
+            Directory Sectors MUST be zero. This field is not supported for version 3 compound files.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundHeader.FatSectorCount">
+            <summary>
+            Gets or sets the number of FAT sectors.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundHeader.RootDirectoryEntryStart">
+            <summary>
+            Gets or sets the number of first Root Directory Entry (Property Set Storage, FAT Directory) sector.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundHeader.TransactionSignature">
+            <summary>
+            Gets or sets the transaction signature, 0 for Excel.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundHeader.MiniStreamCutoff">
+            <summary>
+            Gets or sets the maximum size for small stream, typically 4096 bytes.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundHeader.MiniFatFirstSector">
+            <summary>
+            Gets or sets the first sector of Mini FAT, FAT_EndOfChain if there's no one.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundHeader.MiniFatSectorCount">
+            <summary>
+            Gets or sets the number of sectors in Mini FAT, 0 if there's no one.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundHeader.DifFirstSector">
+            <summary>
+            Gets or sets the first sector of DIF, FAT_EndOfChain if there's no one.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundHeader.DifSectorCount">
+            <summary>
+            Gets or sets the number of sectors in DIF, 0 if there's no one.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundHeader.First109DifSectorChain">
+            <summary>
+            Gets or sets the first 109 locations in the DIF sector chain.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Core.CsvFormat.CsvAnalyzer.Analyze(System.IO.Stream,System.String[],System.Text.Encoding,System.Int32,System.Nullable{System.Char},System.Boolean,System.Nullable{System.Char},System.Int32@,System.String@,System.Text.Encoding@,System.Int32@,System.Int32@)">
+            <summary>
+            Reads completely through a CSV stream to determine encoding, separator, field count and row count.
+            Uses fallbackEncoding if there is no BOM. Throws DecoderFallbackException if there are invalid characters in the stream.
+            Returns the separator whose average field count is closest to its max field count.
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.Core.CsvFormat.CsvParser">
+            <summary>
+            Reentrant CSV character parser. The byte offsets and decoded character cursor survive callback pauses.
+            Scan mode tracks field lengths using the same grammar without building field values.
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.Core.DecodedCellValue">
+            <summary>
+            An owned cell value decoded by a format reader, before workbook-dependent conversion.
+            Shared string references are tagged explicitly so BIFF2 integers remain numeric values.
+            Formatted strings opt into date/duration parsing; legacy BIFF strings remain literal.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Core.DecodedCellValue.#ctor(System.Object,ExcelDataReader.Core.CellValueKind,System.UInt32)">
+            <summary>
+            An owned cell value decoded by a format reader, before workbook-dependent conversion.
+            Shared string references are tagged explicitly so BIFF2 integers remain numeric values.
+            Formatted strings opt into date/duration parsing; legacy BIFF strings remain literal.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.ExtendedFormat.ParentCellStyleXf">
+            <summary>
+            Gets the to the parent Cell Style CF record with overrides for this XF. Only used with Cell XFs.
+            0xFFF means no override.
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.Core.Helpers">
+            <summary>
+            Helpers class.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Core.Helpers.IsSingleByteEncoding(System.Text.Encoding)">
+            <summary>
+            Determines whether the encoding is single byte or not.
+            </summary>
+            <param name="encoding">The encoding.</param>
+            <returns>
+                <see langword="true"/> if the specified encoding is single byte; otherwise, <see langword="false"/>.
+            </returns>
+        </member>
+        <member name="M:ExcelDataReader.Core.Helpers.AdjustOADateTime(System.Double,System.Boolean)">
+            <summary>
+            Convert a double from Excel to an OA DateTime double. 
+            The returned value is normalized to the '1900' date mode and adjusted for the 1900 leap year bug.
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.Core.ISharedStringSink">
+            <summary>
+            Receives shared strings as UTF-16LE code units borrowed from a parser buffer.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Core.ISharedStringSink.AddUtf16(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Adds a string. The buffer is only valid for the duration of the call and must not be retained.
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.Core.IWorkbook`1">
+            <summary>
+            The common workbook interface between the binary and OpenXml formats.
+            </summary>
+            <typeparam name="TWorksheet">A type implementing IWorksheet.</typeparam>
+        </member>
+        <member name="T:ExcelDataReader.Core.IWorksheet">
+            <summary>
+            Common worksheet metadata and push-reader creation across supported formats.
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.Core.NumberFormat.NumberFormatString">
+            <summary>
+            Parse ECMA-376 number format strings from Excel and other spreadsheet softwares.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Core.NumberFormat.NumberFormatString.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Core.NumberFormat.NumberFormatString"/> class.
+            </summary>
+            <param name="formatString">The number format string.</param>
+        </member>
+        <member name="M:ExcelDataReader.Core.NumberFormat.NumberFormatString.#ctor(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Core.NumberFormat.NumberFormatString"/> class with
+            pre-known classification, bypassing parsing. Used for built-in format indices whose
+            <see cref="P:ExcelDataReader.Core.NumberFormat.NumberFormatString.IsDateTimeFormat"/> and <see cref="P:ExcelDataReader.Core.NumberFormat.NumberFormatString.IsTimeSpanFormat"/> values are fixed by spec.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.NumberFormat.NumberFormatString.IsValid">
+            <summary>
+            Gets a value indicating whether the number format string is valid.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.NumberFormat.NumberFormatString.FormatString">
+            <summary>
+            Gets the number format string.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.NumberFormat.NumberFormatString.IsDateTimeFormat">
+            <summary>
+            Gets a value indicating whether the format represents a DateTime.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.NumberFormat.NumberFormatString.IsTimeSpanFormat">
+            <summary>
+            Gets a value indicating whether the format represents a TimeSpan.
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.Core.OfficeCrypto.AgileEncryptedPackageStream">
+            <summary>
+            A seekable stream for reading an EncryptedPackage blob using OpenXml Agile Encryption. 
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.Core.OfficeCrypto.AgileEncryption">
+            <summary>
+            Represents "Agile Encryption" used in XLSX (Office 2010 and newer).
+            </summary>
+        </member>
+        <member name="F:ExcelDataReader.Core.OfficeCrypto.CryptoHelpers.MaxHashSize">
+            <summary>
+            Largest supported hash (SHA-512) in bytes; also an upper bound for block key lengths.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Core.OfficeCrypto.CryptoHelpers.HashBlockKey(System.Byte[],System.Int32,ExcelDataReader.Core.OfficeCrypto.HashIdentifier,System.Int32,System.Byte[],System.Int32)">
+            <summary>
+            Writes hash(prefix || LE32(blockNumber)) into <paramref name="destination"/>, truncated to
+            <paramref name="keyLength"/> bytes and zero-padded to <paramref name="resultLength"/> bytes.
+            <paramref name="keyLength"/> must not exceed <paramref name="resultLength"/>.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Core.OfficeCrypto.CryptoHelpers.SpinHash(System.Security.Cryptography.HashAlgorithm,System.Byte[],System.Int32)">
+            <summary>
+            Runs the key derivation spin loop <c>hash = H(LE32(i) || hash)</c> in place.
+            <paramref name="hash"/> must be exactly one hash long.
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.Core.OfficeCrypto.EncryptionInfo">
+            <summary>
+            Base class for the various encryption schemes used by Excel.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.OfficeCrypto.EncryptionInfo.IsXor">
+            <summary>
+            Gets a value indicating whether XOR obfuscation is used.
+            When true, the ICryptoTransform can be cast to XorTransform and
+            handle the special case where XorArrayIndex must be manipulated
+            per record.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Core.OfficeCrypto.EncryptionInfo.GenerateBlockKey(System.Int32,System.Byte[],System.Byte[])">
+            <summary>
+            Writes the block key into <paramref name="destination"/> (at least <see cref="F:ExcelDataReader.Core.OfficeCrypto.CryptoHelpers.MaxHashSize"/> bytes)
+            and returns its length. Used on per-block paths to avoid allocating a key array per block.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Core.OfficeCrypto.EncryptionInfo.GenerateBlockKey(System.Int32,System.Byte[])">
+            <summary>
+            Returns the block key in a newly allocated array. Only for paths that run once per file.
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.Core.OfficeCrypto.RC4Encryption">
+            <summary>
+            Represents the binary RC4+MD5 encryption header used in XLS.
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.Core.OfficeCrypto.RC4Managed">
+            <summary>
+            Minimal RC4 decryption compatible with System.Security.Cryptography.SymmetricAlgorithm.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Core.OfficeCrypto.RC4Managed.RC4Transform.Reset(System.Byte[],System.Int32)">
+            <summary>
+            Re-runs the RC4 key schedule with the first <paramref name="keyLength"/> bytes of <paramref name="key"/>,
+            so the same instance can be reused for a new block key.
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.Core.OfficeCrypto.StandardEncryption">
+            <summary>
+            Represents the binary "Standard Encryption" header used in XLS and XLSX.
+            XLS uses RC4+SHA1. XLSX uses AES+SHA1.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Core.OfficeCrypto.StandardEncryption.GenerateCryptoApiSecretKey(System.String,System.Byte[],ExcelDataReader.Core.OfficeCrypto.HashIdentifier)">
+            <summary>
+            2.3.5.2 RC4 CryptoAPI Encryption Key Generation.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Core.OfficeCrypto.StandardEncryption.GenerateEcma376SecretKey(System.String,System.Byte[],ExcelDataReader.Core.OfficeCrypto.HashIdentifier,System.Int32,System.Int32)">
+            <summary>
+            2.3.4.7 ECMA-376 Document Encryption Key Generation (Standard Encryption).
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.Core.OfficeCrypto.XorEncryption">
+            <summary>
+            Represents "XOR Deobfucation Method 1" used in XLS.
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.Core.OfficeCrypto.XorManaged">
+            <summary>
+            Minimal Office "XOR Deobfuscation Method 1" implementation compatible
+            with System.Security.Cryptography.SymmetricAlgorithm.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Core.OfficeCrypto.XorManaged.CreateXorArray_Method1(System.Byte[])">
+            <summary>
+            Generates a 16 byte obfuscation array based on the POI/LibreOffice implementations.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.OfficeCrypto.XorManaged.XorTransform.XorArrayIndex">
+            <summary>
+            Gets or sets the obfuscation array index. BIFF obfuscation uses a different XorArrayIndex per record.
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.Core.OpenXmlFormat.BinaryFormat.BiffSharedStringsReader">
+            <summary>
+            Loads XLSB shared strings while each record buffer is owned by the reader.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Core.OpenXmlFormat.BinaryFormat.BiffSharedStringsReader.#ctor(System.IO.Stream)">
+            <summary>
+            Loads XLSB shared strings while each record buffer is owned by the reader.
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.Core.OpenXmlFormat.XmlFormat.XmlProperNamespaces">
+            <summary>
+            Keeps the proper XML namespaces according to the format of the EXCEL file.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Core.OpenXmlFormat.XmlFormat.XmlProperNamespaces.#ctor(System.Boolean)">
+            <summary>
+            Keeps the proper XML namespaces according to the format of the EXCEL file.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.OpenXmlFormat.XmlFormat.XmlProperNamespaces.NsSpreadsheetMl">
+            <summary>
+            Gets the SpreadsheetMl namespace. 
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.Core.OpenXmlFormat.XmlFormat.XmlProperNamespaces.NsDocumentRelationship">
+            <summary>
+            Gets the DocumentRelationship namespace.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Core.OpenXmlFormat.ZipWorker.#ctor(System.IO.Stream)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Core.OpenXmlFormat.ZipWorker"/> class. 
+            </summary>
+            <param name="fileStream">The zip file stream.</param>
+        </member>
+        <member name="M:ExcelDataReader.Core.ReferenceHelper.ParseReference(System.ReadOnlySpan{System.Char},System.Int32@,System.Int32@)">
+            <summary>
+            Logic for the Excel dimensions. Ex: A15.
+            </summary>
+            <param name="value">The value.</param>
+            <param name="column">The column, 1-based.</param>
+            <param name="row">The row, 1-based.</param>
+        </member>
+        <member name="T:ExcelDataReader.Core.SharedStringTable">
+            <summary>
+            In-memory shared string table receiving UTF-16 strings.
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.DocumentProperties">
+            <summary>
+            Immutable descriptive properties stored in a workbook. Missing or unsupported values are null.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.DocumentProperties.Title">
+            <summary>Gets the document title.</summary>
+        </member>
+        <member name="P:ExcelDataReader.DocumentProperties.Subject">
+            <summary>Gets the document subject.</summary>
+        </member>
+        <member name="P:ExcelDataReader.DocumentProperties.Author">
+            <summary>Gets the document author.</summary>
+        </member>
+        <member name="P:ExcelDataReader.DocumentProperties.Keywords">
+            <summary>Gets the keywords as stored, without splitting them.</summary>
+        </member>
+        <member name="P:ExcelDataReader.DocumentProperties.Description">
+            <summary>Gets the document description (the Comments property in Excel).</summary>
+        </member>
+        <member name="P:ExcelDataReader.DocumentProperties.LastModifiedBy">
+            <summary>Gets the name stored for the last person to save the document.</summary>
+        </member>
+        <member name="P:ExcelDataReader.DocumentProperties.Created">
+            <summary>Gets the document creation time in UTC.</summary>
+        </member>
+        <member name="P:ExcelDataReader.DocumentProperties.Modified">
+            <summary>Gets the document modification time in UTC.</summary>
+        </member>
+        <member name="P:ExcelDataReader.DocumentProperties.LastPrinted">
+            <summary>Gets the last printing time in UTC.</summary>
+        </member>
+        <member name="T:ExcelDataReader.ExcelDataReader`2">
+            <summary>
+            A generic implementation of IExcelDataReader using worksheet push consumption.
+            </summary>
+            <typeparam name="TWorkbook">A type implementing IWorkbook.</typeparam>
+            <typeparam name="TWorksheet">A type implementing IWorksheet.</typeparam>
+        </member>
+        <member name="M:ExcelDataReader.ExcelDataReader`2.GetSchemaTable">
+            <inheritdoc />
+        </member>
+        <member name="M:ExcelDataReader.ExcelDataReader`2.GetHyperlink(System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:ExcelDataReader.ExcelDataReader`2.Reset">
+            <inheritdoc />
+        </member>
+        <member name="M:ExcelDataReader.ExcelDataReader`2.ResetWorksheet">
+            <inheritdoc />
+        </member>
+        <member name="T:ExcelDataReader.ExcelReaderConfiguration">
+            <summary>
+            Configuration options for an instance of ExcelDataReader.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.ExcelReaderConfiguration.FallbackEncoding">
+            <summary>
+            Gets or sets a value indicating the encoding to use when the input XLS lacks a CodePage record,
+            or when the input CSV lacks a BOM and does not parse as UTF8. Default: cp1252. (XLS BIFF2-5 and CSV only).
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.ExcelReaderConfiguration.Password">
+            <summary>
+            Gets or sets the password used to open password protected workbooks.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.ExcelReaderConfiguration.AutodetectSeparators">
+            <summary>
+            Gets or sets an array of CSV separator strings. The reader autodetects which best fits the input data. Default: , ; TAB | # (CSV only).
+            Candidates must not be null or empty. Multi-character candidates must not contain CR, LF, or the configured quote character.
+            </summary>
+            <remarks>
+            Invalid candidates cause <see cref="M:ExcelDataReader.ExcelReaderFactory.CreateCsvReader(System.IO.Stream,ExcelDataReader.ExcelReaderConfiguration)"/> to throw <see cref="T:System.ArgumentException"/>
+            when the reader is created, not when this property is assigned.
+            A null or empty array disables separator detection, treating each row as a single field.
+            </remarks>
+        </member>
+        <member name="P:ExcelDataReader.ExcelReaderConfiguration.QuoteChar">
+            <summary>
+            Gets or sets a QuoteCharacter for CSV (Default '"').
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.ExcelReaderConfiguration.TrimWhiteSpace">
+            <summary>
+            Gets or sets a value indicating whether to trim white space values for CSV (Default 'true').
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.ExcelReaderConfiguration.LeaveOpen">
+            <summary>
+            Gets or sets a value indicating whether to leave the stream open after the IExcelDataReader object is disposed. Default: false.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.ExcelReaderConfiguration.AnalyzeInitialCsvRows">
+            <summary>
+            Gets or sets a value indicating the number of rows to analyze for encoding, separator and field count in a CSV.
+            When set, this option causes the IExcelDataReader.RowCount property to throw an exception.
+            Default: 0 - analyzes the entire file (CSV only, has no effect on other formats).
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.ExcelReaderConfiguration.SinglePassMode">
+            <summary>
+            Gets or sets a value indicating whether to skip the initial full-scan pass used to determine FieldCount and RowCount.
+            When true, RowCount throws InvalidOperationException and FieldCount reflects the maximum column index seen so far,
+            growing dynamically as rows are read. Default: false (XLS, XLSX/XLSB, and SpreadsheetML only, has no effect on CSV).
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.ExcelReaderConfiguration.SharedStringStorageMode">
+            <summary>
+            Gets or sets shared string storage for XLSX, XLSB, and BIFF8 XLS. Default: Default.
+            SpillToDisk uses temporary disk storage when shared strings exceed SharedStringSpillThreshold.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.ExcelReaderConfiguration.SharedStringSpillThreshold">
+            <summary>
+            Gets or sets the accounted SST storage threshold in bytes for SpillToDisk mode. Default: 64 MiB.
+            Must be at least 1 MiB. Accounts for shared-string table capacity, strings, disk buffers
+            and cache, not other reader allocations. This is not a total memory limit.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.ExcelReaderConfiguration.SharedStringTemporaryDirectory">
+            <summary>
+            Gets or sets the spill directory. Default: the system temporary directory.
+            Files are created only when spilling and deleted when the reader closes.
+            Temporary strings are plaintext, including for password-protected workbooks.
+            Disk errors propagate without an in-memory fallback.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.ExcelReaderConfiguration.EscapeChar">
+            <summary>
+            Gets or sets an escape character for CSV quoted fields (Default null - disabled).
+            When set, this character inside a quoted field escapes the next character (e.g. set to '\' to support \" as an escaped quote).
+            This is not part of RFC 4180; only enable it when reading files that use backslash-style escaping.
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.ExcelReaderFactory">
+            <summary>
+            The ExcelReader Factory.
+            </summary>
+            <remarks>
+            Input errors may also occur when reading worksheets or requesting lazily loaded metadata.
+            Documented exceptions are not exhaustive; malformed content may also cause standard .NET exceptions.
+            </remarks>
+        </member>
+        <member name="M:ExcelDataReader.ExcelReaderFactory.CreateReader(System.IO.Stream,ExcelDataReader.ExcelReaderConfiguration)">
+            <summary>
+            Creates an instance of <see cref="T:ExcelDataReader.ExcelBinaryReader"/> or <see cref="T:ExcelDataReader.ExcelOpenXmlReader"/>.
+            </summary>
+            <param name="fileStream">The file stream.</param>
+            <param name="configuration">The configuration object.</param>
+            <returns>The excel data reader.</returns>
+            <exception cref="T:ExcelDataReader.Exceptions.HeaderException">The input header is not recognized.</exception>
+            <exception cref="T:ExcelDataReader.Exceptions.InvalidPasswordException">The workbook password is required but missing or incorrect.</exception>
+            <exception cref="T:ExcelDataReader.Exceptions.ExcelReaderException">A recognized workbook structure is invalid or a required workbook part is missing.</exception>
+        </member>
+        <member name="M:ExcelDataReader.ExcelReaderFactory.CreateBinaryReader(System.IO.Stream,ExcelDataReader.ExcelReaderConfiguration)">
+            <summary>
+            Creates an instance of <see cref="T:ExcelDataReader.ExcelBinaryReader"/>.
+            </summary>
+            <param name="fileStream">The file stream.</param>
+            <param name="configuration">The configuration object.</param>
+            <returns>The excel data reader.</returns>
+            <exception cref="T:ExcelDataReader.Exceptions.HeaderException">The input header is not recognized.</exception>
+            <exception cref="T:ExcelDataReader.Exceptions.InvalidPasswordException">The workbook password is required but missing or incorrect.</exception>
+            <exception cref="T:ExcelDataReader.Exceptions.ExcelReaderException">A recognized workbook structure is invalid or a required workbook part is missing.</exception>
+        </member>
+        <member name="M:ExcelDataReader.ExcelReaderFactory.CreateOpenXmlReader(System.IO.Stream,ExcelDataReader.ExcelReaderConfiguration)">
+            <summary>
+            Creates an instance of <see cref="T:ExcelDataReader.ExcelOpenXmlReader"/>.
+            </summary>
+            <param name="fileStream">The file stream.</param>
+            <param name="configuration">The reader configuration -or- <see langword="null"/> to use the default configuration.</param>
+            <returns>The excel data reader.</returns>
+            <exception cref="T:ExcelDataReader.Exceptions.HeaderException">The input header is not recognized.</exception>
+            <exception cref="T:ExcelDataReader.Exceptions.InvalidPasswordException">The workbook password is required but missing or incorrect.</exception>
+            <exception cref="T:ExcelDataReader.Exceptions.ExcelReaderException">A recognized workbook structure is invalid or a required workbook part is missing.</exception>
+        </member>
+        <member name="M:ExcelDataReader.ExcelReaderFactory.CreateCsvReader(System.IO.Stream,ExcelDataReader.ExcelReaderConfiguration)">
+            <summary>
+            Creates an instance of ExcelCsvReader.
+            </summary>
+            <param name="fileStream">The file stream.</param>
+            <param name="configuration">The reader configuration -or- <see langword="null"/> to use the default configuration.</param>
+            <returns>The excel data reader.</returns>
+            <exception cref="T:System.ArgumentException">
+            A separator candidate is null or empty, or a multi-character candidate contains CR, LF, or the configured quote character.
+            </exception>
+        </member>
+        <member name="T:ExcelDataReader.Exceptions.CompoundDocumentException">
+            <summary>
+            Thrown when there is a problem parsing the Compound Document container format used by XLS and password-protected XLSX.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Exceptions.CompoundDocumentException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.CompoundDocumentException"/> class.
+            </summary>
+            <param name="message">The error message.</param>
+        </member>
+        <member name="M:ExcelDataReader.Exceptions.CompoundDocumentException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.CompoundDocumentException"/> class.
+            </summary>
+            <param name="message">The error message.</param>
+            <param name="inner">The inner exception.</param>
+        </member>
+        <member name="T:ExcelDataReader.Exceptions.ExcelReaderException">
+            <summary>
+            Base class for exceptions thrown by ExcelDataReader.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Exceptions.ExcelReaderException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.ExcelReaderException"/> class.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Exceptions.ExcelReaderException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.ExcelReaderException"/> class.
+            </summary>
+            <param name="message">The error message.</param>
+        </member>
+        <member name="M:ExcelDataReader.Exceptions.ExcelReaderException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.ExcelReaderException"/> class.
+            </summary>
+            <param name="message">The error message.</param>
+            <param name="inner">The inner exception.</param>
+        </member>
+        <member name="M:ExcelDataReader.Exceptions.ExcelReaderException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.ExcelReaderException"/> class.
+            </summary>
+            <param name="info">The serialization info.</param>
+            <param name="context">The streaming context.</param>
+        </member>
+        <member name="T:ExcelDataReader.Exceptions.HeaderException">
+            <summary>
+            Thrown when ExcelDataReader cannot parse the header.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Exceptions.HeaderException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.HeaderException"/> class.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.Exceptions.HeaderException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.HeaderException"/> class.
+            </summary>
+            <param name="message">The error message.</param>
+        </member>
+        <member name="M:ExcelDataReader.Exceptions.HeaderException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.HeaderException"/> class.
+            </summary>
+            <param name="message">The error message.</param>
+            <param name="inner">The inner exception.</param>
+        </member>
+        <member name="M:ExcelDataReader.Exceptions.HeaderException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.HeaderException"/> class.
+            </summary>
+            <param name="info">The serialization info.</param>
+            <param name="context">The streaming context.</param>
+        </member>
+        <member name="T:ExcelDataReader.Exceptions.InvalidPasswordException">
+            <summary>
+            Thrown when ExcelDataReader cannot open a password protected document because the password.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.InvalidPasswordException"/> class.
+            </remarks>
+            <param name="message">The error message.</param>
+        </member>
+        <member name="M:ExcelDataReader.Exceptions.InvalidPasswordException.#ctor(System.String)">
+            <summary>
+            Thrown when ExcelDataReader cannot open a password protected document because the password.
+            </summary>
+            <remarks>
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.InvalidPasswordException"/> class.
+            </remarks>
+            <param name="message">The error message.</param>
+        </member>
+        <member name="T:ExcelDataReader.HeaderFooter">
+            <summary>
+            Header and footer text. 
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.HeaderFooter.HasDifferentFirst">
+            <summary>
+            Gets a value indicating whether the header and footer are different on the first page. 
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.HeaderFooter.HasDifferentOddEven">
+            <summary>
+            Gets a value indicating whether the header and footer are different on odd and even pages.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.HeaderFooter.FirstHeader">
+            <summary>
+            Gets the header used for the first page if <see cref="P:ExcelDataReader.HeaderFooter.HasDifferentFirst"/> is <see langword="true"/>.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.HeaderFooter.FirstFooter">
+            <summary>
+            Gets the footer used for the first page if <see cref="P:ExcelDataReader.HeaderFooter.HasDifferentFirst"/> is <see langword="true"/>.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.HeaderFooter.OddHeader">
+            <summary>
+            Gets the header used for odd pages -or- all pages if <see cref="P:ExcelDataReader.HeaderFooter.HasDifferentOddEven"/> is <see langword="false"/>. 
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.HeaderFooter.OddFooter">
+            <summary>
+            Gets the footer used for odd pages -or- all pages if <see cref="P:ExcelDataReader.HeaderFooter.HasDifferentOddEven"/> is <see langword="false"/>. 
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.HeaderFooter.EvenHeader">
+            <summary>
+            Gets the header used for even pages if <see cref="P:ExcelDataReader.HeaderFooter.HasDifferentOddEven"/> is <see langword="true"/>. 
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.HeaderFooter.EvenFooter">
+            <summary>
+            Gets the footer used for even pages if <see cref="P:ExcelDataReader.HeaderFooter.HasDifferentOddEven"/> is <see langword="true"/>. 
+            </summary>
+        </member>
+        <member name="T:ExcelDataReader.IExcelDataReader">
+            <summary>
+            The ExcelDataReader interface.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.IExcelDataReader.DocumentProperties">
+            <summary>
+            Gets the workbook's descriptive properties, loaded when the reader is opened.
+            Missing or unsupported properties are null. CSV and raw BIFF have no document properties.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.IExcelDataReader.Name">
+            <summary>
+            Gets the sheet name.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.IExcelDataReader.CodeName">
+            <summary>
+            Gets the sheet VBA code name.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.IExcelDataReader.VisibleState">
+            <summary>
+            Gets the sheet visible state.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.IExcelDataReader.CsvSeparator">
+            <summary>
+            Gets the selected CSV separator, or null for non-CSV readers, when separator detection
+            is disabled, or when no result is selected.
+            </summary>
+            <remarks>
+            Available immediately after creating a CSV reader, including after reaching the end of its rows.
+            May contain multiple characters. The selected candidate need not occur in the input.
+            </remarks>
+        </member>
+        <member name="P:ExcelDataReader.IExcelDataReader.ActiveSheet">
+            <summary>
+            Gets the active sheet.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.IExcelDataReader.IsActiveSheet">
+            <summary>
+            Gets a value indicating whether the worksheet is active.
+            </summary>       
+        </member>
+        <member name="P:ExcelDataReader.IExcelDataReader.HeaderFooter">
+            <summary>
+            Gets the sheet header and footer -or- <see langword="null"/> if none set.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.IExcelDataReader.MergeCells">
+            <summary>
+            Gets the list of merged cell ranges, or an empty array if there are none.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.IExcelDataReader.ResultsCount">
+            <summary>
+            Gets the number of results (workbooks).
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.IExcelDataReader.RowCount">
+            <summary>
+            Gets the number of rows in the current result.
+            </summary>
+        </member>
+        <member name="P:ExcelDataReader.IExcelDataReader.Dimension">
+            <summary>
+            Gets the dimension of the current result.
+            </summary>
+            <remarks>Main use case is analysis of clipboard data. Potentially unreliable in other use cases.</remarks>
+        </member>
+        <member name="P:ExcelDataReader.IExcelDataReader.RowHeight">
+            <summary>
+            Gets the height of the current row in points.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.IExcelDataReader.Reset">
+            <summary>
+            Seeks to the first result.
+            </summary>
+        </member>
+        <member name="M:ExcelDataReader.IExcelDataReader.ResetWorksheet">
+            <summary>
+            Restarts reading the current worksheet without changing the selected result.
+            The next call to <see cref="M:System.Data.IDataReader.Read"/> reads its first row.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">The reader is closed or no worksheet is selected.</exception>
+            <exception cref="T:ExcelDataReader.Exceptions.ExcelReaderException">A recognized worksheet structure is invalid.</exception>
+        </member>
+        <member name="M:ExcelDataReader.IExcelDataReader.GetNumberFormatString(System.Int32)">
+            <summary>
+            Gets the number format for the specified field -or- <see langword="null"/> if there is no value.
+            Returns Excel's original locale-independent built-in format strings.
+            </summary>
+            <param name="i">The index of the field to find.</param>
+            <returns>The number format string of the specified field.</returns>
+        </member>
+        <member name="M:ExcelDataReader.IExcelDataReader.GetNumberFormatString(System.Int32,System.IFormatProvider)">
+            <summary>
+            Gets the number format for the specified field using locale-dependent format patterns,
+            -or- <see langword="null"/> if there is no value.
+            </summary>
+            <param name="i">The index of the field to find.</param>
+            <param name="provider">
+            An <see cref="T:System.IFormatProvider"/> (typically a <see cref="T:System.Globalization.CultureInfo"/>
+            or <see cref="T:System.Globalization.DateTimeFormatInfo"/>) used to resolve locale-dependent
+            built-in number format indices (14–17 and 20–22) to culture-specific date/time format strings.
+            Pass <see langword="null"/> to use Excel's original locale-independent built-in format strings,
+            equivalent to calling <see cref="M:ExcelDataReader.IExcelDataReader.GetNumberFormatString(System.Int32)"/>.
+            </param>
+            <returns>The number format string of the specified field.</returns>
+        </member>
+        <member name="M:ExcelDataReader.IExcelDataReader.GetNumberFormatIndex(System.Int32)">
+            <summary>
+            Gets the number format index for the specified field -or- -1 if there is no value.
+            </summary>
+            <param name="i">The index of the field to find.</param>
+            <returns>The number format index of the specified field.</returns>
+        </member>
+        <member name="M:ExcelDataReader.IExcelDataReader.GetColumnWidth(System.Int32)">
+            <summary>
+            Gets the width the specified column.
+            </summary>
+            <param name="i">The index of the column to find.</param>
+            <returns>The width of the specified column.</returns>
+        </member>
+        <member name="M:ExcelDataReader.IExcelDataReader.GetCellStyle(System.Int32)">
+            <summary>
+            Gets the cell style.
+            </summary>
+            <param name="i">The index of the column to find.</param>
+            <returns>The immutable cell style, which may be shared by multiple cells.</returns>
+        </member>
+        <member name="M:ExcelDataReader.IExcelDataReader.GetCellError(System.Int32)">
+            <summary>
+            Gets the cell error.
+            </summary>
+            <param name="i">The index of the column to find.</param>
+            <returns>The cell error, or null if no error.</returns>
+        </member>
+        <member name="M:ExcelDataReader.IExcelDataReader.GetComment(System.Int32)">
+            <summary>
+            Gets the legacy comment for the specified column on the current row, or null if none is present.
+            Modern threaded comments are not currently read. CSV always returns null.
+            </summary>
+            <remarks>
+            Loaded on first access, which may require an additional worksheet scan.
+            Notes do not extend the reader's row or field counts.
+            </remarks>
+            <param name="i">The zero-based column index.</param>
+            <returns>The immutable comment, or null.</returns>
+            <exception cref="T:System.InvalidOperationException">There is no current row.</exception>
+            <exception cref="T:System.IndexOutOfRangeException">The column is outside the current field count.</exception>
+            <exception cref="T:ExcelDataReader.Exceptions.ExcelReaderException">Supported comment data or its references are invalid.</exception>
+        </member>
+        <member name="M:ExcelDataReader.IExcelDataReader.GetHyperlink(System.Int32)">
+            <summary>
+            Gets the explicit stored hyperlink for the specified column on the current row,
+            or null when there is no supported hyperlink. CSV always returns null.
+            </summary>
+            <remarks>
+            Loaded on first access, which may require an additional worksheet scan.
+            Hyperlinks do not change cell values or extend row or field counts. Formula-generated
+            links are not read. Unsupported hyperlink representations are skipped.
+            </remarks>
+            <param name="i">The zero-based column index.</param>
+            <returns>The immutable hyperlink, including tooltip-only links with an empty address, or null.</returns>
+            <exception cref="T:System.InvalidOperationException">There is no current row.</exception>
+            <exception cref="T:System.IndexOutOfRangeException">The column is outside the current field count.</exception>
+        </member>
+        <member name="T:ExcelDataReader.SharedStringStorageMode">
+            <summary>
+            Specifies how shared strings in XLSX, XLSB, and BIFF8 XLS workbooks are stored.
+            </summary>
+        </member>
+        <member name="F:ExcelDataReader.SharedStringStorageMode.Default">
+            <summary>Keep the entire shared string table in memory without temporary SST files.</summary>
+        </member>
+        <member name="F:ExcelDataReader.SharedStringStorageMode.SpillToDisk">
+            <summary>Use the normal string table until its accounted capacity exceeds the SST budget, then spill to temporary files.</summary>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute">
+            <summary>
+            Indicates which arguments to a method involving an interpolated string handler should be passed to that handler.
+            </summary>
+        </member>
+        <member name="M:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute"/> class.
+            </summary>
+            <param name="argument">The name of the argument that should be passed to the handler.</param>
+            <remarks><see langword="null"/> may be used as the name of the receiver in an instance method.</remarks>
+        </member>
+        <member name="M:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute.#ctor(System.String[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute"/> class.
+            </summary>
+            <param name="arguments">The names of the arguments that should be passed to the handler.</param>
+            <remarks><see langword="null"/> may be used as the name of the receiver in an instance method.</remarks>
+        </member>
+        <member name="P:System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute.Arguments">
+            <summary>
+            Gets the names of the arguments that should be passed to the handler.
+            </summary>
+            <remarks><see langword="null"/> may be used as the name of the receiver in an instance method.</remarks>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.OverloadResolutionPriorityAttribute">
+            <summary>
+            Specifies the priority of a member in overload resolution. When unspecified, the default priority is 0.
+            </summary>
+        </member>
+        <member name="M:System.Runtime.CompilerServices.OverloadResolutionPriorityAttribute.#ctor(System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.OverloadResolutionPriorityAttribute"/> class.
+            </summary>
+            <param name="priority">The priority of the attributed member. Higher numbers are prioritized, lower numbers are deprioritized. 0 is the default if no attribute is present.</param>
+        </member>
+        <member name="P:System.Runtime.CompilerServices.OverloadResolutionPriorityAttribute.Priority">
+            <summary>
+            The priority of the member.
+            </summary>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute">
+            <summary>
+            An attribute that allows parameters to receive the expression of other parameters.
+            </summary>
+        </member>
+        <member name="M:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute"/> class.
+            </summary>
+            <param name="parameterName">The condition parameter value.</param>
+        </member>
+        <member name="P:System.Runtime.CompilerServices.CallerArgumentExpressionAttribute.ParameterName">
+            <summary>
+            Gets the parameter name the expression is retrieved from.
+            </summary>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.ExtensionMarkerAttribute">
+            <summary>
+            This attribute is used to mark extension members and associate them with a specific marker type (which provides detailed information about an extension block and its receiver parameter).
+            This attribute should not be used by developers in source code.
+            </summary>
+        </member>
+        <member name="M:System.Runtime.CompilerServices.ExtensionMarkerAttribute.#ctor(System.String)">
+            <summary>Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.ExtensionMarkerAttribute"/> class.</summary>
+            <param name="name">The name of the marker type this extension member is associated with.</param>
+        </member>
+        <member name="P:System.Runtime.CompilerServices.ExtensionMarkerAttribute.Name">
+            <summary>The name of the marker type this extension member is associated with.</summary>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.SkipLocalsInitAttribute">
+            <summary>
+            Used to indicate to the compiler that the <c>.locals init</c> flag should not be set in method headers.
+            </summary>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.ModuleInitializerAttribute">
+             <summary>
+             Used to indicate to the compiler that a method should be called
+             in its containing module's initializer.
+             </summary>
+             <remarks>
+             When one or more valid methods
+             with this attribute are found in a compilation, the compiler will
+             emit a module initializer which calls each of the attributed methods.
+            
+             Certain requirements are imposed on any method targeted with this attribute:
+             - The method must be `static`.
+             - The method must be an ordinary member method, as opposed to a property accessor, constructor, local function, etc.
+             - The method must be parameterless.
+             - The method must return `void`.
+             - The method must not be generic or be contained in a generic type.
+             - The method's effective accessibility must be `internal` or `public`.
+            
+             The specification for module initializers in the .NET runtime can be found here:
+             https://github.com/dotnet/runtime/blob/main/docs/design/specs/Ecma-335-Augments.md#module-initializer
+             </remarks>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute">
+            <summary>
+            Indicates that compiler support for a particular feature is required for the location where this attribute is applied.
+            </summary>
+        </member>
+        <member name="M:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.#ctor(System.String)">
+            <summary>
+            Creates a new instance of the <see cref="T:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute"/> type.
+            </summary>
+            <param name="featureName">The name of the feature to indicate.</param>
+        </member>
+        <member name="P:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.FeatureName">
+            <summary>
+            The name of the compiler feature.
+            </summary>
+        </member>
+        <member name="P:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.IsOptional">
+            <summary>
+            If true, the compiler can choose to allow access to the location where this attribute is applied if it does not understand <see cref="P:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.FeatureName"/>.
+            </summary>
+        </member>
+        <member name="F:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.RefStructs">
+            <summary>
+            The <see cref="P:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.FeatureName"/> used for the ref structs C# feature.
+            </summary>
+        </member>
+        <member name="F:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.RequiredMembers">
+            <summary>
+            The <see cref="P:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.FeatureName"/> used for the required members C# feature.
+            </summary>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.ParamCollectionAttribute">
+            <summary>
+            Indicates that a method will allow a variable number of arguments in its invocation.
+            </summary>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.InterpolatedStringHandlerAttribute">
+            <summary>
+            Indicates the attributed type is to be used as an interpolated string handler.
+            </summary>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.CompilerLoweringPreserveAttribute">
+            <summary>
+            When applied to an attribute class, instructs the compiler to flow applications of that attribute,
+            from source code down to compiler-generated symbols. This can help IL-based analysis tools.
+            </summary>
+            <remarks>
+            One example where this attribute applies is in C# primary constructor parameters. If an attribute
+            marked with <see cref="T:System.Runtime.CompilerServices.CompilerLoweringPreserveAttribute"/> gets applied to a primary constructor
+            parameter, the attribute will also be applied to any compiler-generated fields storing that parameter.
+            </remarks>
+        </member>
+        <member name="M:System.Runtime.CompilerServices.CompilerLoweringPreserveAttribute.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.CompilerLoweringPreserveAttribute"/> class.
+            </summary>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.IsExternalInit">
+            <summary>
+            Reserved to be used by the compiler for tracking metadata.
+            This class should not be used by developers in source code.
+            </summary>
+        </member>
+        <member name="M:System.Runtime.CompilerServices.CollectionBuilderAttribute.#ctor(System.Type,System.String)">
+            <summary>
+            Initialize the attribute to refer to the <paramref name="methodName"/> method on the <paramref name="builderType"/> type.
+            </summary>
+            <param name="builderType">The type of the builder to use to construct the collection.</param>
+            <param name="methodName">The name of the method on the builder to use to construct the collection.</param>
+            <remarks>
+            <paramref name="methodName"/> must refer to a static method that accepts a single parameter of
+            type <see cref="T:System.ReadOnlySpan`1"/> and returns an instance of the collection being built containing
+            a copy of the data from that span.  In future releases of .NET, additional patterns may be supported.
+            </remarks>
+        </member>
+        <member name="P:System.Runtime.CompilerServices.CollectionBuilderAttribute.BuilderType">
+            <summary>
+            Gets the type of the builder to use to construct the collection.
+            </summary>
+        </member>
+        <member name="P:System.Runtime.CompilerServices.CollectionBuilderAttribute.MethodName">
+            <summary>
+            Gets the name of the method on the builder to use to construct the collection.
+            </summary>
+            <remarks>
+            This should match the metadata name of the target method.
+            For example, this might be ".ctor" if targeting the type's constructor.
+            </remarks>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.RequiredMemberAttribute">
+            <summary>
+            Specifies that a type has required members or that a member is required.
+            </summary>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.RequiresLocationAttribute">
+            <summary>
+            Reserved for use by a compiler for tracking metadata.
+            This attribute should not be used by developers in source code.
+            </summary>
+        </member>
+        <member name="M:System.Runtime.Versioning.RequiresPreviewFeaturesAttribute.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Runtime.Versioning.RequiresPreviewFeaturesAttribute"/> class.
+            </summary>
+        </member>
+        <member name="M:System.Runtime.Versioning.RequiresPreviewFeaturesAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Runtime.Versioning.RequiresPreviewFeaturesAttribute"/> class with the specified message.
+            </summary>
+            <param name="message">An optional message associated with this attribute instance.</param>
+        </member>
+        <member name="P:System.Runtime.Versioning.RequiresPreviewFeaturesAttribute.Message">
+            <summary>
+            Returns the optional message associated with this attribute instance.
+            </summary>
+        </member>
+        <member name="P:System.Runtime.Versioning.RequiresPreviewFeaturesAttribute.Url">
+            <summary>
+            Returns the optional URL associated with this attribute instance.
+            </summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.MemberNotNullAttribute">
+            <summary>
+            Specifies that the method or property will ensure that the listed field and property members have not-null values.
+            </summary>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.MemberNotNullAttribute.#ctor(System.String)">
+            <summary>
+            Initializes the attribute with a field or property member.
+            </summary>
+            <param name="member">The field or property member that is promised to be not-null.</param>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.MemberNotNullAttribute.#ctor(System.String[])">
+            <summary>
+            Initializes the attribute with the list of field and property members.
+            </summary>
+            <param name="members">The list of field and property members that are promised to be not-null.</param>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.MemberNotNullAttribute.Members">
+            <summary>
+            Gets field or property member names.
+            </summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute">
+            <summary>
+            Specifies the syntax used in a string.
+            </summary>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.#ctor(System.String)">
+            <summary>
+            Initializes the <see cref="T:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute"/> with the identifier of the syntax used.
+            </summary>
+            <param name="syntax">The syntax identifier.</param>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.#ctor(System.String,System.Object[])">
+            <summary>Initializes the <see cref="T:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute"/> with the identifier of the syntax used.</summary>
+            <param name="syntax">The syntax identifier.</param>
+            <param name="arguments">Optional arguments associated with the specific syntax employed.</param>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.Syntax">
+            <summary>Gets the identifier of the syntax used.</summary>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.Arguments">
+            <summary>Optional arguments associated with the specific syntax employed.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.CompositeFormat">
+            <summary>The syntax identifier for strings containing composite formats for string formatting.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.DateOnlyFormat">
+            <summary>The syntax identifier for strings containing date format specifiers.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.DateTimeFormat">
+            <summary>The syntax identifier for strings containing date and time format specifiers.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.EnumFormat">
+            <summary>The syntax identifier for strings containing <see cref="T:System.Enum"/> format specifiers.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.GuidFormat">
+            <summary>The syntax identifier for strings containing <see cref="T:System.Guid"/> format specifiers.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.Json">
+            <summary>The syntax identifier for strings containing JavaScript Object Notation (JSON).</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.NumericFormat">
+            <summary>The syntax identifier for strings containing numeric format specifiers.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.Regex">
+            <summary>The syntax identifier for strings containing regular expressions.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.TimeOnlyFormat">
+            <summary>The syntax identifier for strings containing time format specifiers.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.TimeSpanFormat">
+            <summary>The syntax identifier for strings containing <see cref="T:System.TimeSpan"/> format specifiers.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.Uri">
+            <summary>The syntax identifier for strings containing URIs.</summary>
+        </member>
+        <member name="F:System.Diagnostics.CodeAnalysis.StringSyntaxAttribute.Xml">
+            <summary>The syntax identifier for strings containing XML.</summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute">
+            <summary>
+            Specifies that the method or property will ensure that the listed field and property
+            members have not-null values when returning with the specified return value condition.
+            </summary>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.#ctor(System.Boolean,System.String)">
+            <summary>
+            Initializes the attribute with the specified return value condition and a field or property member.
+            </summary>
+            <param name="returnValue">The return value condition. If the method returns this value, the associated parameter will not be null.</param>
+            <param name="member">The field or property member that is promised to be not-null.</param>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.#ctor(System.Boolean,System.String[])">
+            <summary>
+            Initializes the attribute with the specified return value condition and list of field and property members.
+            </summary>
+            <param name="returnValue">The return value condition. If the method returns this value, the associated parameter will not be null.</param>
+            <param name="members">The list of field and property members that are promised to be not-null.</param>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.ReturnValue">
+            <summary>
+            Gets the return value condition.
+            </summary>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.Members">
+            <summary>
+            Gets field or property member names.
+            </summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.SetsRequiredMembersAttribute">
+            <summary>
+            Specifies that this constructor sets all required members for the current type,
+            and callers do not need to set any required members themselves.
+            </summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.ConstantExpectedAttribute">
+            <summary>
+            Indicates that the specified method parameter expects a constant.
+            </summary>
+            <remarks>
+            This can be used to inform tooling that a constant should be used as an argument for the annotated parameter.
+            </remarks>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.ConstantExpectedAttribute.Min">
+            <summary>
+            Indicates the minimum bound of the expected constant, inclusive.
+            </summary>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.ConstantExpectedAttribute.Max">
+            <summary>
+            Indicates the maximum bound of the expected constant, inclusive.
+            </summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.UnscopedRefAttribute">
+            <summary>
+            Used to indicate a byref escapes and is not scoped.
+            </summary>
+            <remarks>
+            <para>
+            There are several cases where the C# compiler treats a <see langword="ref"/> as implicitly
+            <see langword="scoped"/> - where the compiler does not allow the <see langword="ref"/> to escape the method.
+            </para>
+            <para>
+            For example:
+            <list type="number">
+                <item><see langword="this"/> for <see langword="struct"/> instance methods.</item>
+                <item><see langword="ref"/> parameters that refer to <see langword="ref"/> <see langword="struct"/> types.</item>
+                <item><see langword="out"/> parameters.</item>
+            </list>
+            </para>
+            <para>
+            This attribute is used in those instances where the <see langword="ref"/> should be allowed to escape.
+            </para>
+            <para>
+            Applying this attribute, in any form, has impact on consumers of the applicable API. It is necessary for
+            API authors to understand the lifetime implications of applying this attribute and how it may impact their users.
+            </para>
+            </remarks>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.ExperimentalAttribute">
+            <summary>
+            Indicates that an API is experimental and it may change in the future.
+            </summary>
+            <remarks>
+            This attribute allows call sites to be flagged with a diagnostic that indicates that an experimental
+            feature is used. Authors can use this attribute to ship preview features in their assemblies.
+            </remarks>
+        </member>
+        <member name="M:System.Diagnostics.CodeAnalysis.ExperimentalAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Diagnostics.CodeAnalysis.ExperimentalAttribute"/> class,
+            specifying the ID that the compiler will use when reporting a use of the API the attribute applies to.
+            </summary>
+            <param name="diagnosticId">The ID that the compiler will use when reporting a use of the API the attribute applies to.</param>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.ExperimentalAttribute.DiagnosticId">
+            <summary>
+            Gets the ID that the compiler will use when reporting a use of the API the attribute applies to.
+            </summary>
+            <value>The unique diagnostic ID.</value>
+            <remarks>
+            The diagnostic ID is shown in build output for warnings and errors.
+            <para>This property represents the unique ID that can be used to suppress the warnings or errors, if needed.</para>
+            </remarks>
+        </member>
+        <member name="P:System.Diagnostics.CodeAnalysis.ExperimentalAttribute.UrlFormat">
+            <summary>
+            Gets or sets the URL for corresponding documentation.
+            The API accepts a format string instead of an actual URL, creating a generic URL that includes the diagnostic ID.
+            </summary>
+            <value>The format string that represents a URL to corresponding documentation.</value>
+            <remarks>An example format string is <c>https://contoso.com/obsoletion-warnings/{0}</c>.</remarks>
+        </member>
+        <member name="T:Microsoft.CodeAnalysis.EmbeddedAttribute">
+            <summary>
+            A special attribute recognized by Roslyn, that marks a type as "embedded", meaning it won't ever be visible from other assemblies.
+            </summary>
+        </member>
+    </members>
+</doc>

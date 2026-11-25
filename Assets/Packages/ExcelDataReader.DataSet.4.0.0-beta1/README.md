@@ -1,0 +1,472 @@
+# ExcelDataReader
+
+[![NuGet](https://img.shields.io/nuget/v/ExcelDataReader.svg)](https://www.nuget.org/packages/ExcelDataReader) [![CI](https://github.com/ExcelDataReader/ExcelDataReader/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/ExcelDataReader/ExcelDataReader/actions/workflows/ci.yml)
+
+Lightweight and fast library written in C# for reading Microsoft Excel files (2.0-2021, 365).
+
+Please feel free to fork and submit pull requests to the develop branch.
+
+If you are reporting an issue it is really useful if you can supply an example Excel file as this makes debugging much easier and without it we may not be able to resolve any problems.
+
+## Supported file formats and versions
+
+| File Type | Container Format | File Format | Excel Version(s) |
+| --------- | ---------------- | ----------- | ---------------- |
+| .xlsx     | ZIP, CFB+ZIP     | OpenXml     | 2007 and newer |
+| .xlsb     | ZIP, CFB         | OpenXml     | 2007 and newer |
+| .xls      | CFB              | BIFF8       | 97, 2000, XP, 2003<br>98, 2001, v.X, 2004 (Mac) |
+| .xls      | CFB              | BIFF5       | 5.0, 95 |
+| .xls      | -                | BIFF4       | 4.0 |
+| .xls      | -                | BIFF3       | 3.0 |
+| .xls      | -                | BIFF2       | 2.0, 2.2 |
+| .xml      | -                | SpreadsheetML | 2002, 2003 (XML Spreadsheet) |
+| .csv      | -                | CSV         | (All) |
+
+## Finding the binaries
+
+It is recommended to use NuGet through the VS Package Manager Console `Install-Package <package>` or using the VS "Manage NuGet Packages..." extension. 
+
+As of ExcelDataReader version 3.0, the project was split into multiple packages:
+
+Install the `ExcelDataReader` base package to use the "low level" reader interface. Compatible with net462, netstandard2.0 and netstandard2.1.
+
+Install the `ExcelDataReader.DataSet` extension package to use the `AsDataSet()` method to populate a `System.Data.DataSet`. This will also pull in the base package. Compatible with net462, netstandard2.0 and netstandard2.1.
+
+## How to use
+
+```c#
+using (var stream = File.Open(filePath, FileMode.Open, FileAccess.Read))
+{
+    // Auto-detect format, supports:
+    //  - Binary Excel files (2.0-2003 format; *.xls)
+    //  - Legacy Excel XML Spreadsheet files (2002-2003 format; *.xml)
+    //  - OpenXml Excel files (2007 format; *.xlsx, *.xlsb)
+    using (var reader = ExcelReaderFactory.CreateReader(stream))
+    {
+        // Choose one of either 1 or 2:
+
+        // 1. Use the reader methods
+        do
+        {
+            while (reader.Read())
+            {
+                // reader.GetDouble(0);
+            }
+        } while (reader.NextResult());
+
+        // 2. Use the AsDataSet extension method
+        var result = reader.AsDataSet();
+
+        // The result of each spreadsheet is in result.Tables
+    }
+}
+```
+
+### Reading .CSV files
+
+Use `ExcelReaderFactory.CreateCsvReader` instead of `CreateReader` to parse a stream of plain text with comma separated values.
+
+Use `AutodetectSeparators` to configure possible delimiters, including multi-character delimiters such as `["||"]`. The selected delimiter is available through `reader.CsvSeparator`. Set `FallbackEncoding` when reading files that are not UTF-8 and have no encoding marker.
+
+By default, the reader examines the whole file during initialization to determine its column and row counts. For large files, set `AnalyzeInitialCsvRows` to limit this analysis to the specified number of rows. `RowCount` is unavailable when this option is enabled, and `FieldCount` is based on the sampled rows.
+
+All CSV field values are returned as strings. The caller is responsible for converting them to numbers, dates, or other types.
+
+### Using the reader methods
+
+The `AsDataSet()` extension method is a convenient helper for quickly getting the data, but is not always available or desirable to use. IExcelDataReader extends the `System.Data.IDataReader` and `IDataRecord` interfaces to navigate and retrieve data at a lower level. The most important reader methods and properties:
+
+
+| Method                                                                                  | Property                                                                                                                                                                                                                |
+|-----------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `Read()`                                                                                | reads a row from the current sheet.                                                                                                                                                                                     |
+| `NextResult()`                                                                          | advances the cursor to the next sheet.                                                                                                                                                                                  |
+| `Reset()` | restarts reading from the first sheet. |
+| `ResetWorksheet()` | restarts reading the current sheet, including after its last row. The next `Read()` returns its first row; a sheet must still be selected. |
+| `ResultsCount`                                                                          | returns the number of sheets in the current workbook.                                                                                                                                                                   |
+| `Name`                                                                                  | returns the name of the current sheet.                                                                                                                                                                                  |
+| `CodeName`                                                                              | returns the VBA code name identifier of the current sheet.                                                                                                                                                              |
+| `FieldCount`                                                                            | returns the number of columns in the current sheet.                                                                                                                                                                     |
+| `RowCount`                                                                              | returns the number of rows in the current sheet. This includes terminal empty rows which are otherwise excluded by AsDataSet(). Throws `InvalidOperationException` on CSV files when used with `AnalyzeInitialCsvRows`. |
+| `Depth`                                                                                 | always returns `0` because ExcelDataReader does not expose nested result sets.                                                                                                                                          |
+| `HeaderFooter`                                                                          | returns an object with information about the headers and footers, or `null` if there are none.                                                                                                                          |
+| `MergeCells`                                                                            | returns an array of merged cell ranges in the current sheet.                                                                                                                                                            |
+| `RowHeight`                                                                             | returns the visual height of the current row in points. May be 0 if the row is hidden.                                                                                                                                  |
+| `GetColumnWidth()`                                                                      | returns the width of a column in character units. May be 0 if the column is hidden.                                                                                                                                     |
+| `GetFieldType()`                                                                        | returns the type of a value in the current row. Always one of the types supported by Excel: `double`, `int`, `bool`, `DateTime`, `TimeSpan`, `string`, or `typeof(DBNull)` if there is no value.                        |
+| `IsDBNull()`                                                                            | returns `true` if a value in the current row is `DBNull` (i.e. the cell is empty).                                                                                                                                     |
+| `GetValue()`                                                                            | returns a value from the current row as an `object`, or `DBNull.Value` if there is no value.                                                                                                                            |
+| `GetDouble()`<br/>`GetInt32()`<br/>`GetBoolean()`<br/>`GetDateTime()`<br/>`GetString()` | return a value from the current row cast to their respective type.                                                                                                                                                      |
+| `GetNumberFormatString()`                                                               | returns a string containing the formatting codes for a value in the current row, or `null` if there is no value. See also the Formatting section below.                                                                 |
+| `GetNumberFormatIndex()`                                                                | returns the number format index for a value in the current row. Index values below 164 refer to built-in number formats, otherwise indicate a custom number format.                                                     |
+| `GetCellStyle()`                                                                        | returns an object containing style information for a cell in the current row: indent, horizontal alignment, hidden, locked.                                                                                             |
+| `CsvSeparator` | returns the selected CSV delimiter, including multi-character delimiters. Available immediately after `CreateCsvReader()`; returns `null` for non-CSV formats, disabled separator detection, or no selected result. |
+| `GetComment()` | returns an immutable comment for a cell in the current row, or `null` if none is supported. Loaded lazily; see [Cell comments](#cell-comments). |
+| `GetHyperlink()` | returns an immutable explicit hyperlink for a cell in the current row, or `null` if none is supported. Loaded lazily; see [Hyperlinks](#hyperlinks). |
+| `DocumentProperties` | returns immutable workbook document properties populated during open. See [Document properties](#document-properties). |
+| The typed `Get*()` methods                                                              | throw `InvalidCastException` unless the types match exactly.                                                                                                                                                            |
+
+### Cell comments
+
+`GetComment(columnIndex)` returns an immutable `CellCommentThread` for the current
+row, or `null` when there is no supported comment. Its read-only `Messages`
+collection contains one `CellCommentMessage` for a legacy note, with `Author`
+and plain `Text`. The author is `null` for older XLS formats without author data.
+Legacy notes are supported in XLS, XLSX, XLSB and SpreadsheetML; modern threaded
+comments are not yet read. CSV always returns `null`. Rich-text formatting,
+note layout and automatic DataSet export are not included.
+
+Call `Read()` successfully before accessing a comment. Comments are loaded on
+first access, which may require an additional worksheet scan. Reading comments
+does not change cell values or DataSet output.
+
+### Hyperlinks
+
+`GetHyperlink(columnIndex)` returns an immutable `CellHyperlink` for the current
+row, or `null` when there is no supported explicit hyperlink. XLS (BIFF8), XLSX, XLSB
+and SpreadsheetML are supported; CSV returns `null`. Formula-generated links
+and unsupported hyperlink representations are not read.
+
+```c#
+while (reader.Read())
+{
+    var value = reader.GetValue(0); // Cell values are unchanged.
+    var link = reader.GetHyperlink(0);
+    var address = link?.Address;
+    var tooltip = link?.Tooltip;
+}
+```
+
+`Address` contains the complete destination, such as
+`https://example.com/report.xlsx#Summary!A1`, `#SalesTotals` or
+`report.xlsx#Summary!A1`. Relative paths and stored escaping are preserved;
+destinations and defined names are not validated or resolved. An address can
+be empty when a stored hyperlink contains only a tooltip.
+
+Hyperlinks are loaded on first access, which may require an additional worksheet
+scan. Reading hyperlinks does not change cell values or DataSet output.
+
+To use hyperlink addresses instead of cell values in `AsDataSet()`, configure
+`TransformValue`. Cells without hyperlinks keep their original values:
+
+```c#
+var result = reader.AsDataSet(new ExcelDataSetConfiguration()
+{
+    ConfigureDataTable = _ => new ExcelDataTableConfiguration()
+    {
+        TransformValue = (rowReader, i, value) =>
+            rowReader.GetHyperlink(i)?.Address ?? value
+    }
+});
+```
+
+### Document properties
+
+`reader.DocumentProperties` exposes the workbook's `Title`, `Subject`, `Author`,
+`Keywords`, `Description`, `LastModifiedBy`, `Created`, `Modified` and
+`LastPrinted`. The immutable object is populated during open, independently of
+the selected worksheet and `SinglePassMode`. Dates are returned as UTC
+`DateTime` values; absent or unsupported properties are `null`.
+
+XLS, XLSX, XLSB and SpreadsheetML are supported. CSV and raw BIFF streams have
+no document properties. These are stored document properties, not filesystem
+attributes; `Description` corresponds to Excel's document Comments property,
+not cell comments. Custom properties are not exposed. Invalid optional property
+values are ignored without changing worksheet values.
+
+### CreateReader() configuration options
+
+The `ExcelReaderFactory.CreateReader()`, `CreateBinaryReader()`, `CreateOpenXmlReader()`, `CreateCsvReader()` methods accept an optional configuration object to modify the behavior of the reader:
+
+```c#
+var reader = ExcelReaderFactory.CreateReader(stream, new ExcelReaderConfiguration()
+{
+    // Encoding to use when the input XLS lacks a CodePage record,
+    // or when the input CSV lacks a BOM and does not parse as UTF8.
+    // Default: cp1252 (XLS BIFF2-5 and CSV only)
+    FallbackEncoding = Encoding.GetEncoding(1252),
+
+    // Password used to open password-protected workbooks.
+    Password = "password",
+
+    // CSV separator candidates. The reader autodetects which best fits the input data.
+    // Default: , ; TAB | # (CSV only)
+    AutodetectSeparators = new string[] { ",", ";", "\t", "|", "#" },
+
+    // Quote character for CSV. Default: " (CSV only)
+    QuoteChar = '"',
+
+    // Trim whitespace around CSV fields. Default: true (CSV only)
+    TrimWhiteSpace = true,
+
+    // Leave the stream open after the reader is disposed. Default: false
+    LeaveOpen = false,
+
+    // Number of CSV rows to analyze for encoding, separator and field count.
+    // When nonzero, accessing RowCount throws an exception.
+    // Default: 0 - analyzes the entire file (CSV only)
+    AnalyzeInitialCsvRows = 0,
+
+    // Read without determining the full worksheet size upfront. When true, RowCount
+    // throws InvalidOperationException and FieldCount grows dynamically as
+    // rows are read. Default: false
+    // (XLS, XLSX/XLSB, and SpreadsheetML only, has no effect on CSV)
+    SinglePassMode = false,
+
+    // Escape character for CSV quoted fields. When set, this
+    // character inside a quoted field escapes the next character, e.g. set to
+    // '\\' to support \" as an escaped quote. Not part of RFC 4180; only
+    // enable when reading files that use backslash-style escaping.
+    // Default: null - disabled (CSV only)
+    EscapeChar = null,
+});
+```
+
+Non-seekable input streams are buffered in memory before reading.
+
+### Large shared string tables
+
+XLSX, XLSB, and BIFF8 XLS files can contain large shared string tables (SSTs). By default, the entire table is kept in memory. Use `SpillToDisk` to move the table to temporary files when it exceeds a configurable memory threshold:
+
+| `SharedStringStorageMode` | Behavior |
+|---|---|
+| `Default` | Keep the entire shared string table in memory; no temporary SST files. |
+| `SpillToDisk` | Keep the shared string table in memory until it exceeds the configured threshold, then move it to temporary files. |
+
+```c#
+using var reader = ExcelReaderFactory.CreateReader(stream, new ExcelReaderConfiguration
+{
+    SharedStringStorageMode = SharedStringStorageMode.SpillToDisk,
+    SharedStringSpillThreshold = 64L * 1024 * 1024, // bytes; default 64 MiB, minimum 1 MiB
+    SharedStringTemporaryDirectory = null, // system temporary directory by default
+});
+```
+
+Spilling to disk reduces memory used by the shared string table but can make reading slower. The threshold applies separately to each reader and is not a limit on total memory usage, including data accumulated by `AsDataSet()`.
+
+Temporary files require an existing writable directory and sufficient disk space. They contain **plaintext even for password-protected workbooks** and are released by `Close()`/`Dispose()`, independently of `LeaveOpen`. Disk failures propagate without falling back to unbounded RAM.
+
+See [shared string storage details and benchmarks](src/ExcelDataReader.Benchmarks/SharedStringStorage.md) for memory accounting, file handling, and performance measurements.
+
+### AsDataSet() configuration options
+
+The `AsDataSet()` method accepts an optional configuration object to modify the behavior of the DataSet conversion:
+
+```c#
+var result = reader.AsDataSet(new ExcelDataSetConfiguration()
+{
+    // Set the DataColumn.DataType property in a second pass.
+    UseColumnDataType = true,
+
+    // Include the current sheet in the DataSet.
+    // Called once per sheet before ConfigureDataTable.
+    FilterSheet = (tableReader, sheetIndex) => true,
+
+    // Configure each DataTable.
+    ConfigureDataTable = (tableReader) => new ExcelDataTableConfiguration()
+    {
+        // Whether the DataTable should be case sensitive.
+        // Useful when setting a primary key after loading from Excel.
+        CaseSensitive = false,
+
+        // Prefix of generated column names.
+        EmptyColumnNamePrefix = "Column",
+
+        // Use a row from the data as column names.
+        UseHeaderRow = false,
+
+        // Select which row is the header row.
+        // Only called when UseHeaderRow = true.
+        ReadHeaderRow = (rowReader) => {
+            // F.ex skip the first row and use the 2nd row as column headers:
+            rowReader.Read();
+        },
+
+        // Include the current row in the DataTable.
+        FilterRow = (rowReader) => {
+            return true;
+        },
+
+        // Include the specific column in the DataTable.
+        // Called once per column after reading the headers.
+        FilterColumn = (rowReader, columnIndex) => {
+            return true;
+        },
+
+        // Fill merged cells with their top-left cell's value. Default: false
+        FillMergedCellsValue = false,
+    }
+});
+```
+Setting up `AsDataSet()` configuration, use the FilterRow callback to implement a "progress indicator" while loading, e.g.:
+
+```c#
+int currentRow = 0;
+var result = reader.AsDataSet(new ExcelDataSetConfiguration()
+{
+    ConfigureDataTable = (tableReader) => new ExcelDataTableConfiguration()
+    {
+        FilterRow = (rowReader) => {
+            int progress = (int)Math.Ceiling((decimal)++currentRow / (decimal)rowReader.RowCount * (decimal)100);
+            // progress is in the range 0..100
+            return true;
+        }
+    }
+});
+```
+
+## Formatting
+
+ExcelDataReader does not support formatting directly. Users may retrieve the number format string for a cell through `IExcelDataReader.GetNumberFormatString(i)` and use the third party ExcelNumberFormat library for formatting purposes.
+
+`GetNumberFormatString(i)` returns Excel's original locale-independent built-in format strings. To get locale-specific date and time format strings for built-in number format indices 14–17 and 22, use the overload `GetNumberFormatString(i, provider)` with a `CultureInfo` or `DateTimeFormatInfo`. Passing `null` is equivalent to calling the no-argument overload.
+
+Example helper method using ExcelDataReader and ExcelNumberFormat to format a value:
+
+```c#
+string GetFormattedValue(IExcelDataReader reader, int columnIndex, CultureInfo culture)
+{
+    var value = reader.GetValue(columnIndex);
+    var formatString = reader.GetNumberFormatString(columnIndex, culture);
+    if (formatString != null)
+    {
+        var format = new NumberFormat(formatString);
+        return format.Format(value, culture);
+    }
+    return Convert.ToString(value, culture);
+}
+```
+
+See also:
+- https://github.com/andersnm/ExcelNumberFormat
+- https://www.nuget.org/packages/ExcelNumberFormat
+
+## Upgrading from 3.x to 4.0
+
+### Logging API removed
+
+The unused `ExcelDataReader.Log` API (`Log`, `LogManager`, `ILog`, `ILogFactory`, and `NullLogFactory`) has been removed. Remove any logger initialization or implementations of these interfaces.
+
+### CSV separator candidates are strings
+
+`AutodetectSeparators` changed from `char[]` to `string[]` to support multi-character delimiters. Replace character literals such as `[',', ';']` with string literals such as `[",", ";"]`.
+
+### Null cells now return `DBNull.Value` instead of `null`
+
+`GetValue()` now returns `DBNull.Value` instead of `null` for empty cells, aligning with the `IDataReader` contract. `GetFieldType()` correspondingly returns `typeof(DBNull)` instead of `null`.
+
+**Before (3.x):**
+```c#
+var value = reader.GetValue(i);
+if (value == null)
+{
+    // cell is empty
+}
+```
+
+**After (4.0):**
+```c#
+if (reader.IsDBNull(i))
+{
+    // cell is empty
+}
+// or
+var value = reader.GetValue(i);
+if (value is DBNull)
+{
+    // cell is empty
+}
+```
+
+The typed getters (`GetString()`, `GetBoolean()`, `GetDateTime()`, etc.) will throw `InvalidCastException` when called on an empty cell. Always check `IsDBNull(i)` first:
+
+```c#
+// Before (3.x): returned null for empty cells
+string value = reader.GetString(i);
+
+// After (4.0): throws InvalidCastException for empty cells — check first
+string? value = reader.IsDBNull(i) ? null : reader.GetString(i);
+```
+
+### `GetValue()` returns `DateTime` instead of `DateTimeOffset` for strict OpenXml dates
+
+In strict OpenXml mode, date values were previously returned as `DateTimeOffset`. They are now returned as `DateTime`, consistent with all other date handling in ExcelDataReader.
+
+```c#
+// Before (3.x)
+var value = (DateTimeOffset)reader.GetValue(i);
+
+// After (4.0)
+var value = reader.GetDateTime(i); // or (DateTime)reader.GetValue(i)
+```
+
+### Non-seekable input streams are now supported
+
+Non-seekable input streams previously caused an exception. They are now fully buffered in memory before reading, so memory usage grows with the input size.
+
+### Row ordering in XLSX and XLSB files
+
+By default, XLSX and XLSB readers return rows in ascending row-index order and combine repeated entries for the same row, even when separated by other rows in the file. For duplicate cells, the last value in file order wins; the last entry for a row determines its height and hidden state. Reordering can require additional memory, up to buffering the entire worksheet for severely out-of-order input.
+
+With `SinglePassMode = true`, consecutive entries for the same row are still combined, but out-of-order rows or revisits to completed rows throw `InvalidOperationException`. Use the default `SinglePassMode = false` when reading files with non-sequential rows.
+
+### Extensible Encryption exception type changed
+
+Workbooks using Extensible Encryption remain unsupported. Recognized Extensible Encryption versions now throw `NotSupportedException` instead of `InvalidOperationException`. Update any exception handling that specifically catches the previous type for this case.
+
+### Exceptions for malformed workbook content
+
+Some explicit checks for malformed XLS records and missing required encryption attributes now throw `ExcelReaderException` instead of `ArgumentException`, `IndexOutOfRangeException`, or `XmlException`. Update handlers that relied on those specific types. Other failures, including XML parsing and ZIP errors, can still throw standard .NET exceptions.
+
+### `TransformValue` callback parameter types changed to nullable
+
+The `ExcelDataTableConfiguration.TransformValue` delegate type changed from `Func<IExcelDataReader, int, object, object>` to `Func<IExcelDataReader, int, object?, object?>`. If you assigned a named method to this property, update its signature:
+
+```c#
+// Before (3.x)
+object MyTransform(IExcelDataReader reader, int col, object value) => ...;
+
+// After (4.0)
+object? MyTransform(IExcelDataReader reader, int col, object? value) => ...;
+```
+
+Anonymous lambdas are unaffected — the compiler infers the parameter types automatically.
+
+## Upgrading from 2.x to 3.x
+
+ExcelDataReader 3 had some breaking changes, and older code may produce error messages similar to:
+
+```
+'IExcelDataReader' does not contain a definition for 'AsDataSet'...
+'IExcelDataReader' does not contain a definition for 'IsFirstRowAsColumnNames'...
+```
+
+To fix:
+
+1. Make sure to rename any `Excel` namespace references in the code to the new namespace `ExcelDataReader`
+
+2. Make sure the project has a reference to the `ExcelDataReader.DataSet` package to use `AsDataSet()`
+
+3. Remove the line of code with `IsFirstRowAsColumnNames` and change the call to AsDataSet() to something like this:
+
+```c#
+var result = reader.AsDataSet(new ExcelDataSetConfiguration()
+{
+    ConfigureDataTable = (_) => new ExcelDataTableConfiguration()
+    {
+        UseHeaderRow = true
+    }
+});
+```
+
+## Important note on .NET Core
+
+By default, ExcelDataReader throws a NotSupportedException "No data is available for encoding 1252." on .NET Core and .NET 5.0 or later.
+
+To fix, add a dependency to the package `System.Text.Encoding.CodePages` and then add code to register the code page provider during application initialization (f.ex in Startup.cs):
+
+```c#
+System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+```
+
+This is required to parse strings in binary BIFF2-5 Excel documents encoded with DOS-era code pages. These encodings are registered by default in the full .NET Framework, but not on .NET Core and .NET 5.0 or later.
